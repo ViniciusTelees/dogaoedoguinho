@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login — Dogão & Doguinho{% endblock %}
+
+{% block content %}
+<section class="login-section">
+  <div class="login-box">
+    <div class="login-icon">🔑</div>
+    <h2 class="login-title">Área do Dono</h2>
+    <p class="login-sub">Acesso exclusivo para o dono</p>
+
+    <form method="POST" action="{{ url_for('login') }}" class="login-form">
+      <div class="form-group">
+        <label for="usuario">Usuário</label>
+        <input type="text" id="usuario" name="usuario" placeholder="seu usuário" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-login">Entrar no Painel</button>
+    </form>
+
+    <a href="{{ url_for('index') }}" class="login-back">← Voltar ao cardápio</a>
+  </div>
+</section>
+{% endblock %}

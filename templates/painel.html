@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Área do Dono — Dogão & Doguinho{% endblock %}
+
+{% block content %}
+<section class="painel-section">
+
+  <div class="painel-header">
+    <h2>🏠 Área do Dono</h2>
+    <p class="painel-sub">Gerencie o status das suas lojas</p>
+  </div>
+
+  <!-- ── CONTROLE DE STATUS POR LOJA ── -->
+  <div class="status-lojas-grid">
+    {% for key, loja in lojas.items() %}
+    <div class="status-control-box {% if status[key] %}box-aberto{% else %}box-fechado{% endif %}">
+      <div class="status-control-info">
+        <span class="status-control-icon">{% if status[key] %}🟢{% else %}🔴{% endif %}</span>
+        <div>
+          <strong>{{ loja.nome }}</strong>
+          <span class="status-modo">{{ loja.endereco }}</span>
+          <span class="status-label {% if status[key] %}label-aberto{% else %}label-fechado{% endif %}">
+            {% if status[key] %}Aberta agora{% else %}Fechada agora{% endif %}
+          </span>
+        </div>
+      </div>
+      <div class="status-control-btns">
+        {% if not status[key] %}
+        <form method="POST" action="{{ url_for('alterar_status', loja=key) }}">
+          <input type="hidden" name="acao" value="abrir">
+          <button type="submit" class="btn-status btn-abrir">✅ Abrir</button>
+        </form>
+        {% else %}
+        <form method="POST" action="{{ url_for('alterar_status', loja=key) }}">
+          <input type="hidden" name="acao" value="fechar">
+          <button type="submit" class="btn-status btn-fechar">🔴 Fechar</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</section>
+{% endblock %}

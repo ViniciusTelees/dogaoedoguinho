@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Cardápio — Dogão & Doguinho{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">O melhor da rua, do jeito certo</p>
+    <h1 class="hero-title">Tradicional<br>& Gourmet</h1>
+    <p class="hero-desc">Feito na hora, com ingredientes frescos.<br>Do clássico ao elaborado, temos o dog ideal pra você.</p>
+    <a href="#cardapio" class="btn-hero">Ver Cardápio ↓</a>
+  </div>
+  <div class="hero-badge">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Dogão & Doguinho" class="hero-logo-img" />
+  </div>
+</section>
+
+<!-- ── CARDÁPIO ── -->
+<section id="cardapio" class="cardapio-section">
+
+  <!-- Abas -->
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <button class="tab active" data-tab="tradicionais">🌭 Tradicionais</button>
+      <button class="tab" data-tab="gourmet">⭐ Gourmet</button>
+      <button class="tab" data-tab="bebidas">🥤 Bebidas</button>
+    </div>
+  </div>
+
+  <!-- Painéis das abas -->
+  <div class="tab-panels">
+
+    <!-- Tradicionais -->
+    <div class="tab-panel active" id="tab-tradicionais">
+      <div class="items-grid">
+        {% for item in cardapio.tradicionais %}
+        <div class="card-item">
+          <div class="card-icon">🌭</div>
+          <div class="card-body">
+            <h3 class="card-nome">{{ item.nome }}</h3>
+            <p class="card-desc">{{ item.descricao }}</p>
+          </div>
+          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Gourmet -->
+    <div class="tab-panel" id="tab-gourmet">
+      <div class="items-grid">
+        {% for item in cardapio.gourmet %}
+        <div class="card-item gourmet">
+          <div class="card-icon">⭐</div>
+          <div class="card-body">
+            <h3 class="card-nome">{{ item.nome }}</h3>
+            <p class="card-desc">{{ item.descricao }}</p>
+          </div>
+          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Bebidas -->
+    <div class="tab-panel" id="tab-bebidas">
+      <div class="items-grid">
+        {% for item in cardapio.bebidas %}
+        <div class="card-item bebida">
+          <div class="card-icon">🥤</div>
+          <div class="card-body">
+            <h3 class="card-nome">{{ item.nome }}</h3>
+            <p class="card-desc">{{ item.descricao }}</p>
+          </div>
+          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

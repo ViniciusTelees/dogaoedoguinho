@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Admin — Dogão & Doguinho{% endblock %}
+
+{% block content %}
+<section class="painel-section">
+
+  <div class="painel-header">
+    <h2>⚙️ Painel Admin</h2>
+    <p class="painel-sub">Gerencie os itens do cardápio</p>
+  </div>
+
+  <!-- ── CARDÁPIO ── -->
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <button class="tab active" data-tab="p-tradicionais">🌭 Tradicionais</button>
+      <button class="tab" data-tab="p-gourmet">⭐ Gourmet</button>
+      <button class="tab" data-tab="p-bebidas">🥤 Bebidas</button>
+    </div>
+  </div>
+
+  <div class="tab-panels">
+    {% for categoria, icone in [('tradicionais','🌭'), ('gourmet','⭐'), ('bebidas','🥤')] %}
+    <div class="tab-panel {% if loop.first %}active{% endif %}" id="tab-p-{{ categoria }}">
+
+      <div class="painel-items">
+        {% for item in cardapio[categoria] %}
+        <div class="painel-card">
+          <span class="painel-icon">{{ icone }}</span>
+          <form method="POST" action="{{ url_for('editar_item', categoria=categoria, item_id=item.id) }}" class="painel-form">
+            <input type="text" name="nome" value="{{ item.nome }}" required />
+            <input type="text" name="descricao" value="{{ item.descricao }}" />
+            <div class="preco-row">
+              <label>R$</label>
+              <input type="number" name="preco" value="{{ item.preco }}" step="0.01" min="0" required />
+              <button type="submit" class="btn-salvar">💾 Salvar</button>
+            </div>
+          </form>
+          <form method="POST" action="{{ url_for('remover_item', categoria=categoria, item_id=item.id) }}"
+                onsubmit="return confirm('Remover este item?')">
+            <button type="submit" class="btn-remover">🗑️</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="adicionar-box">
+        <h4>➕ Adicionar novo item</h4>
+        <form method="POST" action="{{ url_for('adicionar_item', categoria=categoria) }}" class="adicionar-form">
+          <input type="text" name="nome" placeholder="Nome do item" required />
+          <input type="text" name="descricao" placeholder="Descrição" />
+          <div class="preco-row">
+            <label>R$</label>
+            <input type="number" name="preco" placeholder="0.00" step="0.01" min="0" required />
+            <button type="submit" class="btn-add">➕ Adicionar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+</section>
+{% endblock %}

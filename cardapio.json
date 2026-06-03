@@ -1,0 +1,74 @@
+{
+  "tradicionais": [
+    {
+      "id": 1,
+      "nome": "Dogão Simples",
+      "descricao": "Pão, 02 salsicha, 06 opções de molho, batata palha e queijo ralado.",
+      "preco": 10.0
+    },
+    {
+      "id": 2,
+      "nome": "Dogão Completo",
+      "descricao": "Pão, salsicha, mostarda, ketchup, milho, ervilha e batata palha",
+      "preco": 12.0
+    },
+    {
+      "id": 3,
+      "nome": "Dogão Bacon",
+      "descricao": "Pão, salsicha, bacon, cheddar e batata palha",
+      "preco": 15.0
+    },
+    {
+      "id": 4,
+      "nome": "Doguinho",
+      "descricao": "Mini pão, mini salsicha, mostarda e ketchup",
+      "preco": 5.0
+    }
+  ],
+  "gourmet": [
+    {
+      "id": 5,
+      "nome": "Dog Gourmet Clássico",
+      "descricao": "Pão brioche, salsicha defumada, maionese artesanal e picles",
+      "preco": 22.0
+    },
+    {
+      "id": 6,
+      "nome": "Dog Trufado",
+      "descricao": "Pão brioche, salsicha, creme de trufas, rúcula e parmesão",
+      "preco": 28.0
+    },
+    {
+      "id": 7,
+      "nome": "Dog BBQ",
+      "descricao": "Pão brioche, salsicha, molho BBQ artesanal, cebola caramelizada e bacon crocante",
+      "preco": 25.0
+    },
+    {
+      "id": 8,
+      "nome": "Dog Especial da Casa",
+      "descricao": "Pão brioche, salsicha dupla, cream cheese, jalapeño e chips crocantes",
+      "preco": 30.0
+    }
+  ],
+  "bebidas": [
+    {
+      "id": 9,
+      "nome": "Refrigerante Lata",
+      "descricao": "350ml gelado",
+      "preco": 6.0
+    },
+    {
+      "id": 10,
+      "nome": "Água Mineral",
+      "descricao": "500ml",
+      "preco": 3.0
+    },
+    {
+      "id": 11,
+      "nome": "Suco Natural",
+      "descricao": "Laranja, limão ou maracujá",
+      "preco": 8.0
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Dogão & Doguinho{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="{{ url_for('index') }}">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Dogão & Doguinho" class="logo-img" />
+          <span class="logo-text">
+            <span class="logo-main">Dogão & Doguinho</span>
+            <span class="logo-sub">Tradicional & Gourmet</span>
+          </span>
+        </a>
+      </div>
+      <nav class="main-nav">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Cardápio</a>
+        {% if session.get('logged_in') %}
+          <a href="{{ url_for('painel') }}" class="nav-link {% if request.endpoint == 'painel' %}active{% endif %}">🏠 Área do Dono</a>
+          <a href="{{ url_for('logout') }}" class="nav-link nav-logout">Sair</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="nav-link nav-admin">🔑 Área do Dono</a>
+        {% endif %}
+        {% if session.get('admin_logged_in') %}
+          <a href="{{ url_for('admin') }}" class="nav-link {% if request.endpoint == 'admin' %}active{% endif %}">⚙️ Admin</a>
+          <a href="{{ url_for('admin_logout') }}" class="nav-link nav-logout">Sair (Admin)</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── WIDGET FLUTUANTE DE STATUS ── -->
+  {% if status is defined %}
+  <div class="status-widget" id="statusWidget">
+    <button class="status-widget-toggle" id="statusToggle" aria-label="Ver status das lojas">
+      <span class="sw-dots">
+        <span class="sw-dot {% if status.lanchonete %}aberto{% else %}fechado{% endif %}"></span>
+        <span class="sw-dot {% if status.barraca %}aberto{% else %}fechado{% endif %}"></span>
+      </span>
+      <span class="sw-label">Lojas</span>
+      <span class="sw-arrow">▲</span>
+    </button>
+    <div class="status-widget-panel" id="statusPanel">
+      <p class="sw-title">Status das Lojas</p>
+      <div class="sw-item">
+        <span class="sw-dot-big {% if status.lanchonete %}aberto{% else %}fechado{% endif %}"></span>
+        <div class="sw-info">
+          <strong>🏪 Lanchonete</strong>
+          <span>{% if status.lanchonete %}Estamos Abertos!{% else %}Fechado no momento{% endif %}</span>
+        </div>
+      </div>
+      <div class="sw-item">
+        <span class="sw-dot-big {% if status.barraca %}aberto{% else %}fechado{% endif %}"></span>
+        <div class="sw-info">
+          <strong>🛒 Barraca</strong>
+          <span>{% if status.barraca %}Estamos Abertos!{% else %}Fechado no momento{% endif %}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── FLASH MESSAGES ── -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ── CONTEÚDO PRINCIPAL ── -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      {% for key, loja in lojas.items() %}
+      <div class="footer-col">
+        <h4>📍 {{ loja.nome }}</h4>
+        <p>{{ loja.endereco }}</p>
+        <a href="{{ loja.maps_url }}" target="_blank" class="maps-link">Ver no Google Maps ↗</a>
+        <div class="map-embed">
+          <iframe src="{{ loja.maps_embed }}"
+            width="100%" height="160" style="border:0; border-radius:8px;"
+            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="footer-col">
+        <h4>📲 Contato</h4>
+        <div class="social-btns">
+          <a class="whatsapp-btn" href="https://wa.me/557192770981" target="_blank">
+            💬 WhatsApp
+          </a>
+          <a class="instagram-btn" href="https://www.instagram.com/dogaoedoguinho/" target="_blank">
+            📸 Instagram
+          </a>
+        </div>
+        <p class="footer-copy">© 2024 Dogão & Doguinho<br>Todos os direitos reservados</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
