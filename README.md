@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌭 Dogão & Doguinho — Página Web
 
 Projeto web para exibição de cardápio e gestão de produtos de uma barraca de dogão.
@@ -57,3 +58,6 @@ http://localhost:5000
 - [ ] Adicionar upload de fotos dos produtos
 - [ ] Integrar pedidos via WhatsApp
 - [ ] Deploy no PythonAnywhere ou Railway (gratuitos)
+=======
+
+>>>>>>> 08c07338ba99b0d1695fbeaf64e6e88bdfe8a630
