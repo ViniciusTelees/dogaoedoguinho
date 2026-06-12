@@ -10,14 +10,14 @@ def inject_global_data():
         'lojas': LOJAS,
         'status': carregar_status()
     }
-app.secret_key = 'dogao_secret_key_2024'
+app.secret_key = os.environ.get('SECRET_KEY', 'change-me-in-railway')
 
 # ─── Credenciais ───────────────────────────────────────────────────────────────
-OWNER_USER = 'dono'
-OWNER_PASS = 'dogao123'
+OWNER_USER = os.environ.get('OWNER_USER', 'dono')
+OWNER_PASS = os.environ.get('OWNER_PASS', 'dogao123')
 
-ADMIN_USER = 'admin'
-ADMIN_PASS = 'admin2024'
+ADMIN_USER = os.environ.get('ADMIN_USER', 'admin')
+ADMIN_PASS = os.environ.get('ADMIN_PASS', 'admin2024')
 
 # ─── Arquivos de dados ────────────────────────────────────────────────────────
 CARDAPIO_FILE = 'cardapio.json'
@@ -252,4 +252,5 @@ def remover_item(categoria, item_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
