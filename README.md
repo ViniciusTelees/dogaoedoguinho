@@ -1,63 +1,56 @@
-<<<<<<< HEAD
-# 🌭 Dogão & Doguinho — Página Web
+# 🌭 Dogão & Doguinho — Cardápio + Pedidos via WhatsApp
 
-Projeto web para exibição de cardápio e gestão de produtos de uma barraca de dogão.
+Projeto Flask para o cardápio do Dogão & Doguinho, com montagem dos dogs, carrinho e envio do pedido para o WhatsApp do responsável.
 
-## Estrutura
+## O que foi atualizado
 
-```
-dogao/
-├── app.py                  # Aplicação Flask principal
-├── cardapio.json           # Cardápio (gerado automaticamente ao editar)
-├── requirements.txt
-├── static/
-│   ├── css/style.css       # Estilos
-│   └── js/main.js          # Scripts
-└── templates/
-    ├── base.html           # Layout base (header, footer, status)
-    ├── index.html          # Página pública com cardápio
-    ├── login.html          # Login do dono
-    └── painel.html         # Painel administrativo
-```
+- Cardápio reorganizado conforme a tabela enviada pelo cliente.
+- Preços principais:
+  - Doguinho — R$ 5,00
+  - Doguinho Duplo — R$ 6,00
+  - Dogão — R$ 10,00
+  - Dogão Duplo — R$ 12,00
+  - Dogão Duplo + Refri 200ml — R$ 13,00
+- Adicionais por item, com valor padrão de R$ 3,00.
+- Montagem do pedido antes de finalizar.
+- Molhos/condimentos com duas opções:
+  - Completo: todos os itens.
+  - Específicos: cliente escolhe os itens desejados.
+- Condimentos disponíveis: caldo, tempero, maionese artesanal, ketchup, mostarda, barbecue, cheddar, catupiry, queijo ralado e batata palha.
+- Carrinho com quantidade, remoção e total.
+- Tela de conferência antes do envio.
+- Chave PIX exibida no checkout e incluída na mensagem.
+- Pedido abre o WhatsApp do responsável com mensagem pronta.
+- A mensagem informa que o preparo só deve acontecer após o envio do comprovante.
+- Configurações de WhatsApp e PIX por variáveis de ambiente.
+- Mantido painel administrativo para editar/adicionar/remover produtos.
 
-## Como rodar
+## Importante sobre o WhatsApp
+
+Por segurança e pelas limitações do link público do WhatsApp, o navegador **não consegue enviar uma mensagem automaticamente sem uma ação do usuário**. O sistema abre o WhatsApp com a mensagem já preenchida; o cliente precisa tocar/clicar em **Enviar** e depois anexar o comprovante do PIX.
+
+Para envio 100% automático seria necessário integrar a **WhatsApp Business Platform/Cloud API** com credenciais próprias.
+
+## Como rodar localmente
 
 ```bash
-# 1. Instalar dependências
 pip install -r requirements.txt
-
-# 2. Rodar o servidor
 python app.py
-
-# 3. Acessar no navegador
-http://localhost:5000
 ```
 
-## Credenciais padrão (mude em produção!)
+Acesse `http://localhost:5000`.
 
-| Campo   | Valor     |
-|---------|-----------|
-| Usuário | `dono`    |
-| Senha   | `dogao123`|
+## Configuração
 
-> ⚠️ **Atenção:** Para produção, use variáveis de ambiente para as credenciais
-> e substitua o armazenamento em JSON por um banco de dados (SQLite/PostgreSQL).
+Copie `.env.example` para `.env` se estiver usando um carregador de variáveis de ambiente, ou configure as variáveis diretamente no serviço de hospedagem:
 
-## Funcionalidades
+- `WHATSAPP_OWNER`
+- `PIX_KEY`
+- `PIX_HOLDER`
+- `SECRET_KEY`
+- `OWNER_USER`
+- `OWNER_PASS`
+- `ADMIN_USER`
+- `ADMIN_PASS`
 
-- ✅ Cardápio público com abas (Tradicionais, Gourmet, Bebidas)
-- ✅ Status automático de aberto/fechado por horário
-- ✅ Mapa de localização no rodapé
-- ✅ Painel administrativo protegido por login
-- ✅ Adicionar, editar e remover itens do cardápio
-- ✅ Design responsivo para celular
-
-## Próximos passos sugeridos
-
-- [ ] Migrar cardápio para banco de dados (SQLite com Flask-SQLAlchemy)
-- [ ] Adicionar upload de fotos dos produtos
-- [ ] Integrar pedidos via WhatsApp
-- [ ] Deploy no PythonAnywhere ou Railway (gratuitos)
-=======
-
->>>>>>> 08c07338ba99b0d1695fbeaf64e6e88bdfe8a630
+Os valores padrão da chave PIX e do WhatsApp foram configurados com base nas informações presentes no material enviado para este projeto. Confira esses dados antes de publicar.

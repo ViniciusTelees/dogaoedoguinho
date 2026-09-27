@@ -8,20 +8,34 @@ app = Flask(__name__)
 def inject_global_data():
     return {
         'lojas': LOJAS,
-        'status': carregar_status()
+        'status': carregar_status(),
+        'pix_key': PIX_KEY,
+        'pix_holder': PIX_HOLDER,
+        'whatsapp_owner': WHATSAPP_OWNER,
+        'condimentos': CONDIMENTOS
     }
-app.secret_key = 'dogao_secret_key_2024'
+app.secret_key = os.environ.get('SECRET_KEY', 'dogao_secret_key_2024')
 
 # ─── Credenciais ───────────────────────────────────────────────────────────────
-OWNER_USER = 'dono'
-OWNER_PASS = 'dogao123'
+OWNER_USER = os.environ.get('OWNER_USER', 'dono')
+OWNER_PASS = os.environ.get('OWNER_PASS', 'dono1234')
 
-ADMIN_USER = 'admin'
-ADMIN_PASS = 'admin2024'
+ADMIN_USER = os.environ.get('ADMIN_USER', 'admin')
+ADMIN_PASS = os.environ.get('ADMIN_PASS', 'admin1234')
 
 # ─── Arquivos de dados ────────────────────────────────────────────────────────
 CARDAPIO_FILE = 'cardapio.json'
 STATUS_FILE   = 'status_loja.json'
+
+# Contato para recebimento dos pedidos. Em produção, prefira definir via variáveis de ambiente.
+WHATSAPP_OWNER = os.environ.get('WHATSAPP_OWNER', '557192770981')
+PIX_KEY = os.environ.get('PIX_KEY', '71992770981')
+PIX_HOLDER = os.environ.get('PIX_HOLDER', 'VINICIUS SILVA')
+
+CONDIMENTOS = [
+    'Caldo', 'Tempero', 'Maionese artesanal', 'Ketchup', 'Mostarda',
+    'Barbecue', 'Cheddar', 'Catupiry', 'Queijo ralado', 'Batata palha'
+]
 
 # ─── Lojas ────────────────────────────────────────────────────────────────────
 LOJAS = {
@@ -40,23 +54,10 @@ LOJAS = {
 }
 
 CARDAPIO_DEFAULT = {
-    "tradicionais": [
-        {"id": 1, "nome": "Dogão Simples",   "descricao": "Pão, salsicha, mostarda e ketchup", "preco": 8.00},
-        {"id": 2, "nome": "Dogão Completo",  "descricao": "Pão, salsicha, mostarda, ketchup, milho, ervilha e batata palha", "preco": 12.00},
-        {"id": 3, "nome": "Dogão Bacon",     "descricao": "Pão, salsicha, bacon, cheddar e batata palha", "preco": 15.00},
-        {"id": 4, "nome": "Doguinho",        "descricao": "Mini pão, mini salsicha, mostarda e ketchup", "preco": 5.00},
-    ],
-    "gourmet": [
-        {"id": 5, "nome": "Dog Gourmet Clássico", "descricao": "Pão brioche, salsicha defumada, maionese artesanal e picles", "preco": 22.00},
-        {"id": 6, "nome": "Dog Trufado",          "descricao": "Pão brioche, salsicha, creme de trufas, rúcula e parmesão", "preco": 28.00},
-        {"id": 7, "nome": "Dog BBQ",              "descricao": "Pão brioche, salsicha, molho BBQ artesanal, cebola caramelizada e bacon crocante", "preco": 25.00},
-        {"id": 8, "nome": "Dog Especial da Casa", "descricao": "Pão brioche, salsicha dupla, cream cheese, jalapeño e chips crocantes", "preco": 30.00},
-    ],
-    "bebidas": [
-        {"id": 9,  "nome": "Refrigerante Lata", "descricao": "350ml gelado", "preco": 6.00},
-        {"id": 10, "nome": "Água Mineral",      "descricao": "500ml", "preco": 3.00},
-        {"id": 11, "nome": "Suco Natural",      "descricao": "Laranja, limão ou maracujá", "preco": 8.00},
-    ]
+    "tradicionais": [],
+    "gourmet_doguinhos": [],
+    "gourmet_dogoes": [],
+    "bebidas": []
 }
 
 

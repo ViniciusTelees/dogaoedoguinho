@@ -2,84 +2,170 @@
 {% block title %}Cardápio — Dogão & Doguinho{% endblock %}
 
 {% block content %}
-
-<!-- ── HERO ── -->
-<section class="hero">
+<section class="hero hero-menu">
   <div class="hero-content">
-    <p class="hero-eyebrow">O melhor da rua, do jeito certo</p>
-    <h1 class="hero-title">Tradicional<br>& Gourmet</h1>
-    <p class="hero-desc">Feito na hora, com ingredientes frescos.<br>Do clássico ao elaborado, temos o dog ideal pra você.</p>
-    <a href="#cardapio" class="btn-hero">Ver Cardápio ↓</a>
+    <p class="hero-eyebrow">Dogão & Doguinho</p>
+    <h1 class="hero-title">Monte do seu jeito<br><span>e peça pelo WhatsApp</span></h1>
+    <p class="hero-desc">Escolha seu dog, monte com adicionais, selecione seus molhos e condimentos e finalize o pedido.</p>
+    <a href="#cardapio" class="btn-hero">Ver cardápio ↓</a>
   </div>
   <div class="hero-badge">
     <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Dogão & Doguinho" class="hero-logo-img" />
   </div>
 </section>
 
-<!-- ── CARDÁPIO ── -->
 <section id="cardapio" class="cardapio-section">
+  <div class="section-heading">
+    <p class="section-kicker">Tabela de preços</p>
+    <h2>Escolha seu pedido</h2>
+    <p>Escolha seu dog, veja os adicionais disponíveis e selecione seus molhos e condimentos.</p>
+  </div>
 
-  <!-- Abas -->
   <div class="tabs-wrapper">
     <div class="tabs">
-      <button class="tab active" data-tab="tradicionais">🌭 Tradicionais</button>
-      <button class="tab" data-tab="gourmet">⭐ Gourmet</button>
+      <button class="tab active" data-tab="tradicionais">🌭 Tradicional</button>
+      <button class="tab" data-tab="gourmet_doguinhos">🍴 Gourmet Doguinho</button>
+      <button class="tab" data-tab="gourmet_dogoes">🔥 Gourmet Dogão</button>
       <button class="tab" data-tab="bebidas">🥤 Bebidas</button>
     </div>
   </div>
 
-  <!-- Painéis das abas -->
   <div class="tab-panels">
-
-    <!-- Tradicionais -->
-    <div class="tab-panel active" id="tab-tradicionais">
-      <div class="items-grid">
-        {% for item in cardapio.tradicionais %}
-        <div class="card-item">
-          <div class="card-icon">🌭</div>
+    {% for categoria, icone in [('tradicionais','🌭'), ('gourmet_doguinhos','🍴'), ('gourmet_dogoes','🔥'), ('bebidas','🥤')] %}
+    <div class="tab-panel {% if loop.first %}active{% endif %}" id="tab-{{ categoria }}">
+      <div class="items-grid menu-grid">
+        {% for item in cardapio[categoria] %}
+        <article class="card-item menu-card">
+          <div class="card-icon">{{ icone }}</div>
           <div class="card-body">
             <h3 class="card-nome">{{ item.nome }}</h3>
             <p class="card-desc">{{ item.descricao }}</p>
           </div>
-          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <!-- Gourmet -->
-    <div class="tab-panel" id="tab-gourmet">
-      <div class="items-grid">
-        {% for item in cardapio.gourmet %}
-        <div class="card-item gourmet">
-          <div class="card-icon">⭐</div>
-          <div class="card-body">
-            <h3 class="card-nome">{{ item.nome }}</h3>
-            <p class="card-desc">{{ item.descricao }}</p>
+          <div class="menu-card-bottom">
+            <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
+            <button class="btn-pedir" type="button"
+              data-product='{{ item|tojson|forceescape }}'>
+              {% if item.montavel %}Montar e pedir{% else %}Adicionar{% endif %}
+            </button>
           </div>
-          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
-        </div>
+        </article>
         {% endfor %}
       </div>
     </div>
-
-    <!-- Bebidas -->
-    <div class="tab-panel" id="tab-bebidas">
-      <div class="items-grid">
-        {% for item in cardapio.bebidas %}
-        <div class="card-item bebida">
-          <div class="card-icon">🥤</div>
-          <div class="card-body">
-            <h3 class="card-nome">{{ item.nome }}</h3>
-            <p class="card-desc">{{ item.descricao }}</p>
-          </div>
-          <div class="card-preco">R$ {{ "%.2f"|format(item.preco) }}</div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
+    {% endfor %}
   </div>
 </section>
 
+<section class="pedido-section" id="pedido">
+  <div class="pedido-box">
+    <div>
+      <p class="section-kicker">Seu pedido</p>
+      <h2>Confira antes de finalizar</h2>
+      <p id="cart-empty">Seu carrinho está vazio. Escolha um item acima.</p>
+      <div id="cart-items" class="cart-items"></div>
+    </div>
+    <div class="cart-summary">
+      <div class="cart-total-row"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+      <button class="btn-finalizar" id="btn-finalizar" type="button" disabled>Finalizar pedido</button>
+      <small>Ao finalizar, o WhatsApp do responsável será aberto com o pedido, total e chave PIX. O preparo acontece após o envio do comprovante.</small>
+    </div>
+  </div>
+</section>
+
+<!-- Modal de montagem -->
+<div class="modal-overlay" id="productModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" type="button" id="modalClose" aria-label="Fechar">×</button>
+    <p class="section-kicker">Personalize</p>
+    <h2 id="modalTitle">Monte seu pedido</h2>
+    <p id="modalDescription" class="modal-description"></p>
+
+    <form id="productForm">
+      <input type="hidden" id="productId">
+      <div id="additionalGroup" class="option-group"></div>
+      <div id="comboDrinkGroup" class="option-group" hidden>
+        <h3>Refrigerante 200ml</h3>
+        <p class="option-help">Escolha o refrigerante do combo.</p>
+        <select id="comboDrink">
+          <option value="Refrigerante 200ml">Refrigerante 200ml</option>
+        </select>
+      </div>
+
+      <div class="option-group">
+        <h3>Molhos e condimentos</h3>
+        <p class="option-help">Escolha uma das opções:</p>
+        <label class="radio-card">
+          <input type="radio" name="condimentosMode" value="completo" checked>
+          <span><strong>Completo</strong><small>Todos os molhos e condimentos.</small></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="condimentosMode" value="especificos">
+          <span><strong>Quero escolher</strong><small>Selecione somente os que deseja.</small></span>
+        </label>
+        <div id="condimentosList" class="check-grid is-disabled"></div>
+      </div>
+
+      <div class="option-group">
+        <label class="field-label" for="itemObservacao">Observação do item</label>
+        <textarea id="itemObservacao" rows="2" placeholder="Ex.: pouco molho, pouca batata..."></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <div><span>Preço do item</span><strong id="modalPrice">R$ 0,00</strong></div>
+        <button class="btn-finalizar" type="submit">Adicionar ao pedido</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal finalização -->
+<div class="modal-overlay" id="checkoutModal" aria-hidden="true">
+  <div class="modal-card checkout-card" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <button class="modal-close" type="button" id="checkoutClose" aria-label="Fechar">×</button>
+    <p class="section-kicker">Finalização</p>
+    <h2 id="checkoutTitle">Enviar pedido</h2>
+    <div id="checkoutSummary" class="checkout-summary"></div>
+
+    <div class="pix-box">
+      <span>💠 Chave PIX</span>
+      <strong>{{ pix_key }}</strong>
+      <small>{{ pix_holder }}</small>
+    </div>
+
+    <form id="checkoutForm" class="checkout-form">
+      <div class="two-fields">
+        <div>
+          <label class="field-label" for="customerName">Seu Nome</label>
+          <input id="customerName" required placeholder="Nome para identificar o pedido">
+        </div>
+        <div>
+          <label class="field-label" for="customerPhone">Telefone</label>
+          <input id="customerPhone" placeholder="(71) 99999-9999">
+        </div>
+      </div>
+      <label class="field-label" for="orderLocation">Local do pedido</label>
+      <select id="orderLocation" required>
+        {% for key, loja in lojas.items() %}
+        <option value="{{ key }}">{{ loja.nome }} — {{ loja.endereco }}</option>
+        {% endfor %}
+      </select>
+      <label class="field-label" for="orderObservation">Observação geral</label>
+      <textarea id="orderObservation" rows="2" placeholder="Ex.: retirar no balcão, observações do pedido..."></textarea>
+      <div class="payment-warning">
+        <strong>⚠️ Atenção:</strong> o pedido só entra em preparo depois que o comprovante do PIX for enviado no WhatsApp.
+      </div>
+      <button class="btn-whatsapp" type="submit">📲 Enviar pedido no WhatsApp</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.DOGAO_CONFIG = {
+  whatsappOwner: {{ whatsapp_owner|tojson }},
+  pixKey: {{ pix_key|tojson }},
+  pixHolder: {{ pix_holder|tojson }}
+};
+</script>
 {% endblock %}
